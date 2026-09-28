@@ -1,0 +1,4 @@
+# Optional software limit. Startup/client flags can tighten it, never raise it.
+# Install as $XDG_CONFIG_HOME/dps150ctl/config.toml, usually
+# ~/.config/dps150ctl/config.toml. Omit the setting to use device/nominal limits.
+max_voltage = 1.0

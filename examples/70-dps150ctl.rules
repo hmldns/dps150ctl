@@ -1,0 +1,6 @@
+# Replace USB_SERIAL and YOUR_USER before installing in /etc/udev/rules.d/.
+# USB serial is reported by `dps150ctl ports --json`.
+# Applies on every reconnect, regardless of ttyACM numbering or desktop login.
+# Requires /usr/bin/setfacl (the acl package). Restores this user's ACL on each
+# add/change event, preserving the normal device owner/group and other users.
+ACTION=="add|change", SUBSYSTEM=="tty", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="5740", ATTRS{serial}=="USB_SERIAL", RUN+="/usr/bin/setfacl -m u:YOUR_USER:rw $env{DEVNAME}"

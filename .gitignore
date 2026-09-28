@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/
+# Optional local serial traces and debugging artifacts; never package resources.
+captures/
+readings.csv
+readings.jsonl
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.coverage

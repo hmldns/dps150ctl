@@ -1,0 +1,8 @@
+include PROTOCOL.md
+recursive-include examples *.toml *.service *.rules
+recursive-include docs *.md *.svg *.png *.jpg
+recursive-include tests *.py *.jsonl
+recursive-include tools *.py
+include dps150.py dps150ctl.py
+recursive-include dps150ctl/data *.rules.in
+prune captures

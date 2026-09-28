@@ -1,0 +1,14 @@
+[Unit]
+Description=FNIRSI DPS-150 local device service
+
+[Service]
+Type=simple
+# Replace USB_SERIAL and, if needed, the executable path (pipx/venv location).
+ExecStart=%h/.local/bin/dps150ctl --device USB_SERIAL daemon run
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=20
+# SIGTERM stops the owner without changing output or releasing the panel lock.
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,10 @@
+{"timestamp_utc": "2026-09-28T01:13:29.346+00:00", "elapsed_s": 0.0041490960866212845, "direction": "tx", "hex": "f1 c1 00 01 01 02"}
+{"timestamp_utc": "2026-09-28T01:13:29.396+00:00", "elapsed_s": 0.05430205725133419, "direction": "tx", "hex": "f1 a1 de 01 00 df"}
+{"timestamp_utc": "2026-09-28T01:13:29.396+00:00", "elapsed_s": 0.05439565610140562, "direction": "rx", "hex": "f0 a1 de 07 44 50 53 2d 31 35 30 8f"}
+{"timestamp_utc": "2026-09-28T01:13:29.446+00:00", "elapsed_s": 0.1045206100679934, "direction": "tx", "hex": "f1 a1 df 01 00 e0"}
+{"timestamp_utc": "2026-09-28T01:13:29.446+00:00", "elapsed_s": 0.10467146895825863, "direction": "rx", "hex": "f0"}
+{"timestamp_utc": "2026-09-28T01:13:29.446+00:00", "elapsed_s": 0.10470106825232506, "direction": "rx", "hex": "a1 df 04 56 31 2e 30 c8"}
+{"timestamp_utc": "2026-09-28T01:13:29.496+00:00", "elapsed_s": 0.15474394103512168, "direction": "tx", "hex": "f1 a1 e0 01 00 e1"}
+{"timestamp_utc": "2026-09-28T01:13:29.497+00:00", "elapsed_s": 0.15490328194573522, "direction": "rx", "hex": "f0"}
+{"timestamp_utc": "2026-09-28T01:13:29.497+00:00", "elapsed_s": 0.15493098692968488, "direction": "rx", "hex": "a1 e0 04 56 31 2e 32 cb"}
+{"timestamp_utc": "2026-09-28T01:13:29.547+00:00", "elapsed_s": 0.20492410892620683, "direction": "tx", "hex": "f1 c1 00 01 00 01"}
