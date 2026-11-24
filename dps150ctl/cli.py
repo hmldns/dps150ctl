@@ -162,6 +162,8 @@ def parser():
     tui = sub.add_parser("tui", help="dashboard; attaches to a service or owns the device")
     tui.add_argument("--demo", action="store_true", help="synthetic device, isolated from real hardware")
     tui.add_argument("--view", choices=("combined", "numbers", "charts"), default="combined")
+    tui.add_argument("--chart-layout", choices=("auto", "side", "stacked"), default="auto",
+                     help="arrange the two charts; auto picks by terminal size ('s' toggles live)")
     daemon = sub.add_parser("daemon", help="foreground headless service")
     daemon_sub = daemon.add_subparsers(dest="daemon_command", required=True)
     daemon_sub.add_parser("run")
@@ -213,7 +215,8 @@ def long_running(args, settings, identity=None):
                         # Another owner won startup. Only attach; never open another port.
                         client.request("describe")
         if args.command == "tui":
-            Dashboard(client, view=args.view, max_voltage=settings.max_voltage, demo=args.demo,
+            Dashboard(client, view=args.view, chart_layout=args.chart_layout,
+                      max_voltage=settings.max_voltage, demo=args.demo,
                       owns_service=service is not None).run()
         else:
             print(f"dps150ctl listening on {endpoint.socket}; Ctrl-C stops without changing output", flush=True)

@@ -21,6 +21,7 @@ from .errors import control_error
 from .state import STALE_SECONDS
 
 WINDOWS = (30, 120, 600)
+CHART_LAYOUTS = ("auto", "side", "stacked")
 
 
 class History:
@@ -150,6 +151,7 @@ class HelpScreen(ModalScreen):
             "o       Toggle output, verified by readback\n"
             "1 / 2 / 3   Numbers / charts / combined\n"
             "[ / ]   30 s / 2 min / 10 min chart window\n"
+            "s       Charts stacked vertically / side by side\n"
             "q       Quit dashboard\n\n"
             "Quitting preserves output and the panel lock.\n"
             "An attached headless service keeps running.\n"
@@ -174,6 +176,7 @@ class Dashboard(App):
         Binding("3", "view('combined')", "Combined", show=False),
         Binding("left_square_bracket", "window(-1)", "Shorter", show=False),
         Binding("right_square_bracket", "window(1)", "Longer", show=False),
+        Binding("s", "toggle_stack", "Stack", show=False),
         Binding("question_mark", "help", "Help"), Binding("q", "quit", "Quit"),
         Binding("ctrl+c", "quit", "Quit", show=False, priority=True),
     ]
@@ -203,9 +206,13 @@ class Dashboard(App):
     .hidden { display: none; }
     """
 
-    def __init__(self, client, *, view="combined", max_voltage=None, demo=False, owns_service=False):
+    def __init__(self, client, *, view="combined", chart_layout="auto", max_voltage=None, demo=False,
+                 owns_service=False):
         super().__init__(ansi_color=True)
+        if chart_layout not in CHART_LAYOUTS:
+            raise ValueError(f"chart_layout must be one of {', '.join(CHART_LAYOUTS)}")
         self.client, self.view, self.max_voltage = client, view, max_voltage
+        self.chart_layout = chart_layout
         self.demo, self.owns_service = demo, owns_service
         self.report = None
         self.history = History()
@@ -285,11 +292,18 @@ class Dashboard(App):
         compact = self.size.width < 76 or self.size.height < 22
         self.query_one("#numbers").set_class(self.view == "charts", "hidden")
         self.query_one("#charts").set_class(self.view == "numbers" or (compact and self.view == "combined"), "hidden")
-        self.query_one("#charts").set_class(self.size.width < 100 and self.size.height >= 32 or self.size.width < 76, "stacked")
+        stacked = self.stacked()
+        self.query_one("#charts").set_class(stacked, "stacked")
         window = WINDOWS[self.window_index]
+        arrangement = ("stacked" if stacked else "side by side") + (" (auto)" if self.chart_layout == "auto" else "")
         note = " · compact display: press 2 for charts" if compact and self.view == "combined" else ""
         self.query_one("#view-label", Static).update(
-            f"1 numbers · 2 charts · 3 combined   |   [ ] history: {window}s{note}")
+            f"1 numbers · 2 charts · 3 combined   |   [ ] history: {window}s   |   s {arrangement}{note}")
+
+    def stacked(self):
+        if self.chart_layout != "auto":
+            return self.chart_layout == "stacked"
+        return self.size.width < 100 and self.size.height >= 32 or self.size.width < 76
 
     def notice(self, message, *, failed=False):
         widget = self.query_one("#notice", Static)
@@ -370,6 +384,13 @@ class Dashboard(App):
         if isinstance(self.screen, ModalScreen):
             return
         self.view = view
+        self.layout_view()
+
+    def action_toggle_stack(self):
+        if isinstance(self.screen, ModalScreen):
+            return
+        # Flip whatever is on screen now; an explicit choice then overrides the size-based default.
+        self.chart_layout = "side" if self.stacked() else "stacked"
         self.layout_view()
 
     def action_window(self, direction):

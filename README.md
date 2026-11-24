@@ -18,7 +18,8 @@ python3 -m venv .venv
 .venv/bin/dps150ctl tui
 ```
 
-Or install this checkout with `pipx install .` to put `dps150ctl` on your PATH.
+Or put `dps150ctl` on your PATH with `make install` (an isolated
+`uv tool install`, falling back to `pipx`; `make uninstall` removes it).
 `python -m dps150ctl` is equivalent to the console command. The project is
 prepared for sharing but has not been published to a package registry.
 
@@ -50,12 +51,15 @@ configured transparency, while retaining colored readings and borders.
 | `o` | Toggle output, with readback verification |
 | `1` / `2` / `3` | Numbers / charts / combined |
 | `[` / `]` | 30-second / 2-minute / 10-minute chart history |
+| `s` | Charts stacked vertically / side by side |
 | `?` | Help |
 | `q` / Ctrl-C | Quit, preserving power and panel lock |
 
 The default is combined, with a two-minute window. Charts resize with the
 terminal; small terminals use a compact display and offer the separate charts
-view. Connection status, USB serial, current tty, sample age, voltage cap, and
+view. The two charts sit side by side or stack vertically depending on terminal
+shape; `s` flips the arrangement, and `--chart-layout stacked|side|auto` sets it
+at startup. Connection status, USB serial, current tty, sample age, voltage cap, and
 errors remain visible. Old readings dim; missing data and reconnects leave
 chart gaps. Panel locking is shown as *requested*, since no reliable lock-status
 readback is known. The protection flag is separate from connection health.

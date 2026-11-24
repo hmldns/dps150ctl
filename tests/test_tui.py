@@ -49,6 +49,14 @@ def test_dashboard_controls_views_and_resize(service):
             assert app.window_index == 0
             await pilot.press("]")
             assert app.window_index == 1
+            charts = app.query_one("#charts")
+            assert app.chart_layout == "auto" and not charts.has_class("stacked")
+            await pilot.press("s")
+            assert app.chart_layout == "stacked" and charts.has_class("stacked")
+            voltage, current = (app.query_one(f"#{name}-chart").region for name in ("voltage", "current"))
+            assert current.y > voltage.y and current.x == voltage.x
+            await pilot.press("s")
+            assert app.chart_layout == "side" and not charts.has_class("stacked")
             for width, height in ((80, 24), (60, 18), (120, 40)):
                 await pilot.resize_terminal(width, height)
                 await pilot.pause()
